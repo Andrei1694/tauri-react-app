@@ -1,0 +1,37 @@
+.sidebar {
+  width: 5%;
+  height: 100vh;
+  background-color: #333;
+  color: #e0e0e0;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.sidebar ul {
+  padding: 0;
+  margin: 0;
+  list-style: none; /* Add this line to remove bullets */
+}
+
+.sidebar li {
+  list-style-type: none;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.sidebar input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.selected {
+  background-color: #444;
+}
