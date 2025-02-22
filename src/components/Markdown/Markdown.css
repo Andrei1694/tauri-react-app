@@ -26,3 +26,17 @@
   font-family: "Courier New", monospace;
   font-size: 14px;
 }
+
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
