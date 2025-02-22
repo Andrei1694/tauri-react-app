@@ -42,6 +42,7 @@ function App() {
   const [windowVisible, setWindowVisible] = useState(false); // Track window visibility
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedPage, setSelectedPage] = useState<Page | null>(null);
+  const [files, setFiles] = useState<any[]>([]);
 
   const setSelectedPageHandler = (page: Page) => {
 	setSelectedPage(page);
@@ -51,7 +52,26 @@ function App() {
     console.log(windowVisible);
     shortcuts();
     hljs.highlightAll();
+	// loadFiles();
   }, []);
+
+  const loadFiles = async() => {
+	let files = []
+	const res = await fetch("/markdown-files/files.json") // Make sure this path is correct
+	const text = await res.text()
+	files = JSON.parse(text)
+	//   .then((res) => res.text())
+	//   .then((text) => {files = JSON.parse(text)})
+	//   .catch((err) => console.error("Error loading Markdown:", err));
+	  console.log(files)
+	  setFiles(files)
+  }
+
+  const getTitles = () => {
+	  const f = files.map((file) => file.title)
+	  console.log(f)
+	  return f
+  }
 
   const addSnippet = (newSnippet: Omit<Snippet, "id">) => {
     setSnippets([...snippets, { ...newSnippet, id: Date.now() }]);
@@ -65,6 +85,8 @@ function App() {
   async function shortcuts() {
     await register("CommandOrControl+Shift+C", pressEventHandler);
   }
+
+
 
   const pressEventHandler = async (e: any) => {
     try {
@@ -95,6 +117,7 @@ function App() {
       console.error("Error handling press event:", error);
     }
   };
+
 
   return (
     <div className="app">

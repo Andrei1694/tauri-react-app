@@ -16,9 +16,11 @@ export default function MarkdownReader() {
       .then((text) => setContent(text))
       .catch((err) => console.error("Error loading Markdown:", err));
   }, []);
+
   useEffect(() => {
     hljs.highlightAll(); // Apply syntax highlighting
   }, [content]); // Runs when markdown content updates
+
    return (
     <div className="markdown-container">
       <Markdown
