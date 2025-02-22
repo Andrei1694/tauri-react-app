@@ -1,0 +1,28 @@
+/* Markdown container */
+.markdown-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #1e1e1e;
+  color: white;
+  border-radius: 10px;
+  font-family: "Arial", sans-serif;
+}
+
+/* Code blocks */
+.hljs {
+  background: #282c34 !important;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Inline code */
+.inline-code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}

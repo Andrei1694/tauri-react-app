@@ -8,6 +8,8 @@ import "./App.css";
 import SnippetForm from "./components/SnippetForm";
 import SnippetList from "./components/SnippetList";
 import Sidebar from "./components/Sidebar/Sidebar";
+import Markdown from "react-markdown";
+import MarkdownReader from "./components/Markdown/MarkdownReader";
 export interface Page {
   title: string;
   content?: string;
@@ -101,7 +103,9 @@ function App() {
       <SnippetList snippets={snippets} deleteSnippet={deleteSnippet} /> */}
       <div className="container">
         <Sidebar pages={pages} setSelectedPageHandler={setSelectedPageHandler} selectedPage={selectedPage} />
-        <div>Content {selectedPage?.content}</div>
+        <div>
+			<MarkdownReader />
+			</div>
       </div>
     </div>
   );
