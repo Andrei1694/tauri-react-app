@@ -1,9 +1,17 @@
 import "./Sidebar.css";
 import { Page } from "../../App";
-
 import { ReactNode, useState } from "react";
+import useStore from "../../store/useStore";
 
-function PageCell({ children, onClick, className }: { children: ReactNode; onClick?: () => void; className?: string }) {
+function PageCell({
+  children,
+  onClick,
+  className,
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+  className?: string;
+}) {
   return (
     <li className={`sidebar_cell ${className}`} onClick={onClick}>
       {children}
@@ -11,14 +19,23 @@ function PageCell({ children, onClick, className }: { children: ReactNode; onCli
   );
 }
 
-export default function Sidebar({ pages, setSelectedPageHandler, selectedPage }: { pages: Page[]; setSelectedPageHandler: (page: Page) => void; selectedPage: Page | null }) {
-  // const [selectedPage, setSelectedPage] = useState<Page | null>(null);
+export default function Sidebar({
+  pages,
+  setSelectedPageHandler,
+  selectedPage,
+}: {
+  pages: Page[];
+  setSelectedPageHandler: (page: Page) => void;
+  selectedPage: Page | null;
+}) {
   const [listOfPages, setListOfPages] = useState(pages);
   const [newPageTitle, setNewPageTitle] = useState("");
-
+	const {files, setSelectedFile, selectedFile} = useStore()
+  // Add page function
   const addPage = () => {
     if (newPageTitle.trim() !== "") {
-      setListOfPages([...listOfPages, { title: newPageTitle }]);
+      const newPage: Page = { title: newPageTitle };
+      setListOfPages((prevPages) => [...prevPages, newPage]);
       setNewPageTitle("");
     }
   };
@@ -27,20 +44,27 @@ export default function Sidebar({ pages, setSelectedPageHandler, selectedPage }:
     <div className="sidebar">
       <div className="sidebar__menu">
         <ul>
-          {listOfPages.map((page, index) => (
+          {files.map((file, index) => (
             <PageCell
-              key={index}
+              key={file.title} // Use a unique identifier (title here)
               onClick={() => {
-                setSelectedPageHandler(page);
+                setSelectedFile(file);
               }}
-              className={selectedPage === page ? "selected" : ""}
+              className={selectedFile?.title === file.title ? "selected" : ""} // Compare titles for equality
             >
-              {page.title}
+              {file.title}
             </PageCell>
           ))}
           <PageCell>
-            <input type="text" placeholder="Add" value={newPageTitle} onChange={(e) => setNewPageTitle(e.target.value)} />
-            <button onClick={addPage}>Add</button>
+            <input
+              type="text"
+              placeholder="Add page title"
+              value={newPageTitle}
+              onChange={(e) => setNewPageTitle(e.target.value)}
+            />
+            <button onClick={addPage} disabled={newPageTitle.trim() === ""}>
+              Add
+            </button>
           </PageCell>
         </ul>
       </div>
