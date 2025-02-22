@@ -121,12 +121,10 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Code Snippet Repository</h1>
-      {/* <SnippetForm addSnippet={addSnippet} />
-      <SnippetList snippets={snippets} deleteSnippet={deleteSnippet} /> */}
+      <h1>Code Snippet Vault</h1>
       <div className="container">
         <Sidebar pages={pages} setSelectedPageHandler={setSelectedPageHandler} selectedPage={selectedPage} />
-        <div>
+        <div className="content">
 			<MarkdownReader />
 			</div>
       </div>

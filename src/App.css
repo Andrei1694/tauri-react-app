@@ -108,3 +108,12 @@ h1 {
 	/* flex-direction: column; */
 	width: 100%;
 }
+
+.content {
+	flex: 1;
+	padding: 20px;
+}
+.content {
+	flex: 1;
+	padding: 20px;
+}
