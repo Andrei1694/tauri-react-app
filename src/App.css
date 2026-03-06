@@ -61,10 +61,7 @@ body,
 }
 
 body {
-  background:
-    radial-gradient(1200px 760px at 12% -16%, rgba(129, 173, 255, 0.26), transparent),
-    radial-gradient(1200px 760px at 94% 110%, rgba(125, 205, 166, 0.2), transparent),
-    linear-gradient(160deg, #0b111b 0%, #121b2a 56%, #0b1524 100%);
+  background: transparent;
   color: var(--text-main);
   font-family: var(--font-ui);
 }
@@ -88,10 +85,8 @@ body {
 .spotlight-backdrop {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(640px 420px at 50% 34%, rgba(95, 151, 255, 0.14), transparent),
-    rgba(4, 8, 14, 0.42);
-  backdrop-filter: blur(9px) saturate(110%);
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .spotlight-panel {
