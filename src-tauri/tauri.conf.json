@@ -10,14 +10,19 @@
     "frontendDist": "../dist"
   },
   "app": {
-  "windows": [
+    "windows": [
       {
         "title": "My Overlay App",
         "decorations": false,
         "transparent": true,
         "alwaysOnTop": true,
         "visible": true,
-		"fullscreen": true
+        "center": true,
+        "width": 980,
+        "height": 760,
+        "minWidth": 720,
+        "minHeight": 520,
+        "resizable": true
       }
     ],
     "security": {
@@ -36,3 +41,4 @@
     ]
   }
 }
+

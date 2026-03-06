@@ -1,0 +1,59 @@
+{
+  "commands": [
+    {
+      "id": "copy-selection",
+      "title": "Copy Selection",
+      "command": "pbcopy < file.txt",
+      "description": "Copy a file content into clipboard on macOS.",
+      "tags": ["clipboard", "macos"],
+      "aliases": ["copy", "clipboard copy"],
+      "suggested": true
+    },
+    {
+      "id": "paste-clipboard",
+      "title": "Paste Clipboard",
+      "command": "pbpaste",
+      "description": "Read and print current clipboard text.",
+      "tags": ["clipboard", "macos"],
+      "aliases": ["paste"],
+      "suggested": true
+    },
+    {
+      "id": "git-status",
+      "title": "Git Status",
+      "command": "git status --short",
+      "description": "Show concise working tree state.",
+      "tags": ["git", "repo"],
+      "aliases": ["status", "changes"],
+      "suggested": true
+    },
+    {
+      "id": "vite-dev",
+      "title": "Start Vite Dev",
+      "command": "npm run dev",
+      "description": "Run frontend development server.",
+      "tags": ["vite", "frontend"],
+      "aliases": ["dev server", "start frontend"],
+      "suggested": true
+    },
+    {
+      "id": "tauri-dev",
+      "title": "Start Tauri Dev",
+      "command": "npm run tauri dev",
+      "description": "Run the desktop app in development mode.",
+      "tags": ["tauri", "desktop"],
+      "aliases": ["desktop dev", "run app"],
+      "suggested": false
+    },
+    {
+      "id": "npm-build",
+      "title": "Build Project",
+      "command": "npm run build",
+      "description": "Build TypeScript and Vite bundles.",
+      "tags": ["build", "ci"],
+      "aliases": ["production build", "compile"],
+      "suggested": false
+    }
+  ]
+}
+

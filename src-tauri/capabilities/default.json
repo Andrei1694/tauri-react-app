@@ -6,11 +6,13 @@
   "permissions": [
     "core:default",
     "opener:default",
-	    "global-shortcut:allow-is-registered",
+    "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister",
-	"core:window:allow-hide",
-	"core:window:allow-show",
-	"core:window:allow-close"
+    "core:window:allow-hide",
+    "core:window:allow-show",
+    "core:window:allow-close",
+    "core:window:allow-is-visible",
+    "core:window:allow-set-focus"
   ]
 }

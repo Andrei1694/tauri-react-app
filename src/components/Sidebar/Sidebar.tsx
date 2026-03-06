@@ -1,73 +1,65 @@
-import "./Sidebar.css";
-import { Page } from "../../App";
-import { ReactNode, useState } from "react";
+import { useMemo, useState } from "react";
 import useStore from "../../store/useStore";
+import "./Sidebar.css";
 
-function PageCell({
-  children,
-  onClick,
-  className,
-}: {
-  children: ReactNode;
-  onClick?: () => void;
-  className?: string;
-}) {
-  return (
-    <li className={`sidebar_cell ${className}`} onClick={onClick}>
-      {children}
-    </li>
-  );
-}
+export default function Sidebar() {
+  const files = useStore((state) => state.files);
+  const selectedFile = useStore((state) => state.selectedFile);
+  const setSelectedFile = useStore((state) => state.setSelectedFile);
+  const [query, setQuery] = useState("");
 
-export default function Sidebar({
-  pages,
-  setSelectedPageHandler,
-  selectedPage,
-}: {
-  pages: Page[];
-  setSelectedPageHandler: (page: Page) => void;
-  selectedPage: Page | null;
-}) {
-  const [listOfPages, setListOfPages] = useState(pages);
-  const [newPageTitle, setNewPageTitle] = useState("");
-	const {files, setSelectedFile, selectedFile} = useStore()
-  // Add page function
-  const addPage = () => {
-    if (newPageTitle.trim() !== "") {
-      const newPage: Page = { title: newPageTitle };
-      setListOfPages((prevPages) => [...prevPages, newPage]);
-      setNewPageTitle("");
+  const filteredFiles = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) {
+      return files;
     }
-  };
+
+    return files.filter((file) => {
+      return (
+        file.title.toLowerCase().includes(normalizedQuery) || file.path.toLowerCase().includes(normalizedQuery)
+      );
+    });
+  }, [files, query]);
 
   return (
-    <div className="sidebar">
-      <div className="sidebar__menu">
-        <ul>
-          {files.map((file, index) => (
-            <PageCell
-              key={file.title} // Use a unique identifier (title here)
-              onClick={() => {
-                setSelectedFile(file);
-              }}
-              className={selectedFile?.title === file.title ? "selected" : ""} // Compare titles for equality
-            >
-              {file.title}
-            </PageCell>
-          ))}
-          <PageCell>
-            <input
-              type="text"
-              placeholder="Add page title"
-              value={newPageTitle}
-              onChange={(e) => setNewPageTitle(e.target.value)}
-            />
-            <button onClick={addPage} disabled={newPageTitle.trim() === ""}>
-              Add
-            </button>
-          </PageCell>
-        </ul>
-      </div>
-    </div>
+    <aside className="doc-sidebar" aria-label="Document navigation">
+      <header className="doc-sidebar__header">
+        <h2>Documents</h2>
+        <p>{files.length} available</p>
+      </header>
+
+      <label className="doc-sidebar__search" htmlFor="doc-search">
+        <span>Search</span>
+        <input
+          id="doc-search"
+          type="search"
+          placeholder="Find by title or path"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      </label>
+
+      <ul className="doc-sidebar__list">
+        {filteredFiles.map((file) => {
+          const isSelected = selectedFile?.path === file.path;
+
+          return (
+            <li key={file.path}>
+              <button
+                type="button"
+                className={`doc-sidebar__item ${isSelected ? "is-selected" : ""}`}
+                onClick={() => setSelectedFile(file)}
+              >
+                <span className="doc-sidebar__title">{file.title}</span>
+                <span className="doc-sidebar__path">{file.path}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      {!filteredFiles.length && <p className="doc-sidebar__empty">No documents match this search.</p>}
+    </aside>
   );
 }
+

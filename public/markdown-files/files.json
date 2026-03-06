@@ -1,13 +1,13 @@
 {
-	"files": [
-		{
-			"title": "Docker ghuide",
-			"path": "/markdown-files/dock.md"
-		},
-		{
-			"name": "asdasdads",
-			"path": "/markdown-files/ceva.md"
-		}
-
-	]
+  "files": [
+    {
+      "title": "Docker Guide",
+      "path": "/markdown-files/dock.md"
+    },
+    {
+      "title": "Quick Commands",
+      "path": "/markdown-files/ceva.md"
+    }
+  ]
 }
+
