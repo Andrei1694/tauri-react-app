@@ -1,5 +1,6 @@
 import "./App.css";
 import { isTauri } from "@tauri-apps/api/core";
+import { LogicalSize } from "@tauri-apps/api/dpi";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { register, unregister, type ShortcutEvent } from "@tauri-apps/plugin-global-shortcut";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -320,6 +321,7 @@ function getDefaultResults(
 function App() {
   const tauriRuntimeAvailable = useMemo(() => isTauri(), []);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const [documents, setDocuments] = useState<DocItem[]>([]);
   const [commands, setCommands] = useState<CommandItem[]>([]);
   const [query, setQuery] = useState(() => readLastQuery());
@@ -337,6 +339,41 @@ function App() {
   const [manifestError, setManifestError] = useState<string | null>(null);
 
   const resultsContainerId = "spotlight-results";
+
+  const syncWindowToPanelBounds = useCallback(async () => {
+    if (!tauriRuntimeAvailable) {
+      return;
+    }
+
+    const panelElement = panelRef.current;
+    const rootElement = panelElement?.parentElement;
+
+    if (!panelElement || !rootElement) {
+      return;
+    }
+
+    const rootStyles = window.getComputedStyle(rootElement);
+    const horizontalPadding =
+      Number.parseFloat(rootStyles.paddingLeft || "0") + Number.parseFloat(rootStyles.paddingRight || "0");
+    const verticalPadding =
+      Number.parseFloat(rootStyles.paddingTop || "0") + Number.parseFloat(rootStyles.paddingBottom || "0");
+
+    const panelRect = panelElement.getBoundingClientRect();
+    const targetWidth = Math.ceil(panelRect.width + horizontalPadding);
+    const targetHeight = Math.ceil(panelRect.height + verticalPadding);
+
+    if (!Number.isFinite(targetWidth) || !Number.isFinite(targetHeight) || targetWidth <= 0 || targetHeight <= 0) {
+      return;
+    }
+
+    try {
+      const currentWindow = getCurrentWindow();
+      await currentWindow.setSize(new LogicalSize(targetWidth, targetHeight));
+      await currentWindow.center();
+    } catch (error) {
+      console.warn("Failed to sync window size to spotlight panel bounds:", error);
+    }
+  }, [tauriRuntimeAvailable]);
 
   const trackRecent = useCallback((item: SearchResult) => {
     const nextEntry: RecentEntry = {
@@ -398,6 +435,27 @@ function App() {
   useEffect(() => {
     windowVisibleRef.current = windowVisible;
   }, [windowVisible]);
+
+  useEffect(() => {
+    if (!tauriRuntimeAvailable || !windowVisible) {
+      return;
+    }
+
+    const resizeOnNextFrame = window.requestAnimationFrame(() => {
+      void syncWindowToPanelBounds();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(resizeOnNextFrame);
+    };
+  }, [
+    commands.length,
+    documents.length,
+    previewDocument,
+    tauriRuntimeAvailable,
+    syncWindowToPanelBounds,
+    windowVisible,
+  ]);
 
   useEffect(() => {
     if (!tauriRuntimeAvailable) {
@@ -901,9 +959,9 @@ function App() {
   };
 
   return (
-    <div className={`spotlight-root ${!windowVisible && tauriRuntimeAvailable ? "spotlight-root--hidden" : ""}`}>
+    <div className={`spotlight-root ${tauriRuntimeAvailable ? "spotlight-root--tauri" : ""} ${!windowVisible && tauriRuntimeAvailable ? "spotlight-root--hidden" : ""}`}>
       <div className="spotlight-backdrop" />
-      <main className="spotlight-panel" aria-label="Spotlight command palette">
+      <main ref={panelRef} className="spotlight-panel" aria-label="Spotlight command palette">
         <header className="spotlight-panel__header">
           <div className="spotlight-traffic" aria-hidden="true">
             <span className="spotlight-traffic__dot spotlight-traffic__dot--red" />

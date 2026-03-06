@@ -77,6 +77,18 @@ body {
   overflow: hidden;
 }
 
+.spotlight-root--tauri {
+  padding: 0;
+}
+
+.spotlight-root--tauri .spotlight-panel {
+  width: 100%;
+  height: 100vh;
+  max-height: none;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
 .spotlight-root--hidden {
   opacity: 0;
   pointer-events: none;
